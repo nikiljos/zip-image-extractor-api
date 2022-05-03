@@ -4,7 +4,10 @@ var mime = require('mime-types')
 
 const extractApi=async(req,res)=>{
     let images=await getImages(req.query.url)
-    console.log(images)
+    .catch(err=>{
+        res.status(400).send("Check URL my friend")
+    })
+    // console.log(images)
     res.send(images);
 
 }
@@ -58,6 +61,9 @@ async function getImages(url){
         return content
         
         
+    })
+    .catch(err=>{
+        throw err;
     })
     
     return images
