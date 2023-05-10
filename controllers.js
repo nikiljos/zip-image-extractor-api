@@ -5,7 +5,7 @@ var mime = require('mime-types')
 const extractApi=async(req,res)=>{
     let images=await getImages(req.query.url)
     .catch(err=>{
-        res.status(400).send("Check URL my friend")
+        res.status(400).send(err.message)
     })
     res.send(images);
 }
@@ -14,13 +14,13 @@ const extractApi=async(req,res)=>{
 async function getImages(url){
 
     // url="https://cdn.discordapp.com/attachments/970770954139607150/970945525081866270/nikiljos.zip"
-    let images=await axios.get(url, { responseType: 'arraybuffer' }).then(async (res) => {
+    let images=await axios.get(url, { responseType: 'arraybuffer',maxContentLength:3*1000*1000 }).then(async (res) => {
         // load contents into jszip and create an object
         let content= await jszip.loadAsync(res.data).then(async (zip) => {
 
             const zipObj = zip
             let imgArray=[]
-
+            console.log(zipObj)
             for(key of Object.keys(zipObj.files)){
 
                 
@@ -30,12 +30,10 @@ async function getImages(url){
                     if(img._data.compressedContent){
                         console.log(key)
                         let fileType=mime.lookup(key)
-                        if(fileType.startsWith("image")){
+                        if(fileType&&fileType.startsWith("image")){
                             await img.async("base64").then(function (string64) {
-                                //send this image to a remote server as if it were a file
                                 let imgURL=`data:${fileType};base64,${string64}`
                                 imgArray.push(imgURL)
-
                             });
                             
                         }
