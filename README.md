@@ -1,9 +1,4 @@
-# A starter template for my NodeJS Projects
+# Zip Image Extractor API
 
-```
-npm init
 
-npm install express
-
-nodemon index.js
-```
+#### [nikjos.in/zip-to-img](https://nikjos.in/zip-to-img)
