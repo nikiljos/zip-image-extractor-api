@@ -2,6 +2,13 @@ const axios=require('axios')
 const jszip=require('jszip')
 var mime = require('mime-types')
 
+const healthCheck=(req,res)=>{
+    res.status(200).send({
+        success:true,
+        message:"Server is running!"
+    })
+}
+
 const extractApi=async(req,res)=>{
     let images=await getImages(req.query.url)
     .catch(err=>{
@@ -56,5 +63,6 @@ async function getImages(url){
 }
 
 module.exports={
-    extractApi
+    extractApi,
+    healthCheck
 }
